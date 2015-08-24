@@ -1,2 +1,2 @@
 # personal-projects
-Personal projects - big or small
+Personal projects - Christian Morte
