@@ -2,12 +2,17 @@ import random, tkinter
 
 class Multiplication:
     def __init__(self):
+        """Resets counters, correct streaks, and number limits."""
         self._wrong_counter = 0
         self._right = 0
         self._min_num, self._max_num = (0,12)
         self._streak = 0
         
     def console_start(self):
+        """
+        Console version of application. Starts flash cards application in its console-form.
+        Most basic form includes randomized questions, error-checking, and game over message.
+        """
         self._name = input('What is your name? ')
         while True:
             try:
@@ -32,10 +37,15 @@ class Multiplication:
                 
                 
     def choose_numbers(self):
+        """
+        Randomly chooses two sets of numbers, with the first being strictly in between the number limits.
+        The second number is chosen between 0 and 12.
+        """
         first = random.randint(self._min_num, self._max_num)
         return (first, random.randint(0,12))
     
     def get_answer(self, first, second):
+        """Returns user's answer input with error-checking."""
         while True:
             try:
                 return int(input('What is {} times {}? '.format(first,second)))
@@ -44,43 +54,59 @@ class Multiplication:
         
     
     def valid_count_choice(self, count):
+        """Returns True if count is still 0."""
         return count < 1
     
     def correct_answer(self,first,sec):
+        """Returns the correct answer for a specific multiplication problem."""
         return first*sec
     
     def correct(self, answer, first, second):
+        """Returns True if user's answer was correct."""
         return answer == self.correct_answer(first, second)
     
     def inc_right(self):
+        """Increments correct counter by 1."""
         self._right += 1
         
     def inc_wrong(self):
+        """Increments wrong counter by 1."""
         self._wrong_counter += 1
         
     def inc_streak(self):
+        """Increments correct-streak counter by 1."""
         self._streak += 1
         
     def reset_streak(self):
+        """Resets correct-streak counter to 0."""
         self._streak = 0
         
     def reset_counter(self):
+        """Resets both wrong and correct counter to 0."""
         self._right, self._wrong_counter = (0,0)
     
     def game_is_over(self):
+        """Returns True if game is over when wrong counter equals wrong limit."""
         return self._wrong_counter == self._count_choice
 
 class MultiplicationApp(Multiplication):
     master = tkinter.Tk()
     
     def __init__(self, master=None):
+        """Initializes Multiplication Flash Cards console functions and starts application."""
         Multiplication.__init__(self)
         self.start_screen()
         
     def start(self):
+        """Opens separate window with flash cards application."""
         self.master.mainloop()
         
     def start_screen(self):
+        """
+        Starts the option screen before starting application.
+        Different options include the name used, minimum/maximum limit, and wrong amount before game over.
+        Default options are given for these choices, and includes start/quit buttons as well.
+        """
         self._canvas = tkinter.Canvas(self.master)
         self._canvas.grid()
         self._top_level()
@@ -133,6 +159,10 @@ class MultiplicationApp(Multiplication):
         _quit_button.grid(row=4, column=2, pady=10)
         
     def _on_start_down(self):
+        """
+        Starts application after user clicks the start button.
+        Sets up various options derived from previous start screen and creates first problem for flash cards.
+        """
         self._name = self._name_entry.get() if self._name_entry.get() != 'What is your name?' else 'PLAYER'
         self._count_choice = int(self._wrong_lb.get(tkinter.ACTIVE))
         number_range = self._min_num_listbox.get(tkinter.ACTIVE)
@@ -150,6 +180,7 @@ class MultiplicationApp(Multiplication):
         self.create_flashcards()
 
     def game_over_screen(self):
+        """Opens game over screen featuring a "Main Menu" button and "Quit" button."""
         self._canvas = tkinter.Canvas(self.master)
         self._canvas.grid()
         self._top_level()
@@ -173,23 +204,28 @@ class MultiplicationApp(Multiplication):
         
     
     def _top_level(self):
+        """Configures top level for canvas window."""
         top=self._canvas.winfo_toplevel()                
         top.rowconfigure(0, weight=1)            
         top.columnconfigure(0, weight=1)
         
     def _canvas_config(self):
+        """Configures canvas rows and column positions and weights."""
         self._canvas.rowconfigure(0, weight=1)           
         self._canvas.columnconfigure(0, weight=1)
         
     def update_counter_correct(self):
+        """Updates correct counter along with the wrong/correct displays."""
         self.inc_right()
         self.count_var.set('Correct: {}\nWrong: {}'.format(self._right, self._wrong_counter))
         
     def update_counter_wrong(self):
+        """Updates wrong counter along with the wrong/correct displays."""
         self.inc_wrong()
         self.count_var.set('Correct: {}\nWrong: {}'.format(self._right, self._wrong_counter))
         
     def create_flashcards(self):
+        """Creates problem screen featuring flash card interface and counter displays."""
         self._canvas = tkinter.Canvas(self.master)
         self._canvas.grid()
         self._top_level()
@@ -222,19 +258,26 @@ class MultiplicationApp(Multiplication):
         self._choose_question()
         
     def _choose_question(self):
+        """
+        Chooses a random interface for the user to answer a problem.
+        This includes multiple choice, fill-in, and entry.
+        """
         if len(str(self.correct_answer(self.first, self.sec))) > 1:
             random.choice([self.entry, self.multiple_choice, self.fill_in])()
         else:
             random.choice([self.entry, self.multiple_choice])()
         
     def _num_format(self, num):
+        """Formats numbers to properly align flash card interface."""
         return '{}'.format(num) if len(str(num)) == 3 else\
             ' {}'.format(num) if len(str(num)) == 2 else '  {}'.format(num)
         
     def entry_answer(self):
+        """Returns user's answer to problem."""
         return self._answer.get()
     
     def display_numbers(self, first, sec):
+        """Displays the two numbers in flash card interface."""
         self._first_num = tkinter.Label(self._canvas, text='{}'.format(first) if len(str(first)) == 2 else '  {}'.format(first), font=('Arial',100,'bold'))
         self._first_num.grid(row=1,column=1,
                          sticky=tkinter.N)
@@ -244,6 +287,7 @@ class MultiplicationApp(Multiplication):
                          sticky=tkinter.N)
         
     def _display_correct(self):
+        """Displays specific "Correct" messages if user answered correctly."""
         correct_messages = ['Good job {}!'.format(self._name), 'That\'s correct {}!'.format(self._name), 'Nice work {}!'.format(self._name)]
         self._correct_display = tkinter.Label(self._canvas, 
                                               text=random.choice(correct_messages) + ("\nThat's {} straight correct!".format(self._streak) if self._streak >= 5 else ''),
@@ -251,19 +295,23 @@ class MultiplicationApp(Multiplication):
         self._correct_display.grid(row=0, column=1)      
         
     def _display_wrong(self):
+        """Displays specific "Wrong" messages if user answered incorrectly."""
         self._correct_display = tkinter.Label(self._canvas, text='That\'s incorrect! \n{} x {} = {}.'.format(self.first, self.sec, self.correct_answer(self.first, self.sec)),
                                               font=('Arial',20,'bold'), anchor='e', foreground='red')
         self._correct_display.grid(row=0, column=1)
         
     def _display_error(self):
+        """Displays specific "Error" messages if user entered an invalid input."""
         self._correct_display = tkinter.Label(self._canvas, text='Invalid entry!',
                                               font=('Arial',20,'bold'), anchor='e', foreground='red')
         self._correct_display.grid(row=0, column=1)   
         
     def new_numbers(self):
+        """Creates new numbers for specific problem."""
         self.first, self.sec = self.choose_numbers()
         
     def entry(self):
+        """Creates entry box for user to answer in a "Entry Question"."""
         default_text = tkinter.StringVar(); default_text.set('What is the answer?')
         self._answer = tkinter.Entry(self._canvas, justify='center', textvariable=default_text)
         self._answer.grid(row=4,column=1)
@@ -275,6 +323,7 @@ class MultiplicationApp(Multiplication):
         self._submit.grid(row=4,column=2,sticky=tkinter.N)
         
     def multiple_choice(self):
+        """Creates four specific multiple-choice buttons for user."""
         def choices_list():
             correct_answer = self.correct_answer(self.first, self.sec)
             if self.first == 0:
@@ -307,6 +356,7 @@ class MultiplicationApp(Multiplication):
         self._submit.grid(row=7,column=2,sticky=tkinter.N)
         
     def fill_in(self):
+        """Creates a fill-in-the-blank question for the user."""
         correct_answer = self.correct_answer(self.first, self.sec)
         
         # Displaying Incomplete answer Label
@@ -327,6 +377,7 @@ class MultiplicationApp(Multiplication):
         self._submit.grid(row=5, column=2)
  
     def _mc_destroy(self):
+        """Destroys widgets for multiple choice questions."""
         self.choice1.destroy()
         self.choice2.destroy()
         self.choice3.destroy()
@@ -334,25 +385,31 @@ class MultiplicationApp(Multiplication):
         self._submit.destroy()
         
     def _entry_destroy(self):
+        """Destroys widgets for entry questions."""
         self._answer.destroy()
         self._submit.destroy()
         
     def _fillin_destroy(self):
+        """Destroys widgets for fill-in-the-blank questions."""
         self.answer_part.destroy()
         self.fill_in_entry.destroy()
         self._submit.destroy()
         
     def _correct_wrong_destroy(self):
+        """Destroys widgets for wrong/correct counters."""
         self._correct_display.destroy()    
         
     def _on_mainmenu(self):
+        """Destroys widgets for main menu and creates start screen."""
         self._canvas.destroy()
         self.start_screen()
         
     def _on_enter_entry(self, event):
+        """Submits user's answer if user pressed "Enter"."""
         self._on_submit_down_entry()
         
     def _on_submit_down_entry(self):
+        """Submits user's answer and updates counters, problems, and game over status for entry questions."""
         try:
             if (self._right, self._wrong_counter) != (0,0):
                 self._correct_wrong_destroy()
@@ -375,6 +432,7 @@ class MultiplicationApp(Multiplication):
             self._display_error()
             
     def _on_submit_down_mc(self):
+        """Submits user's answer and updates counters, problems, and game over status for multiple choice questions."""
         if (self._right, self._wrong_counter) != (0,0):
             self._correct_wrong_destroy()
         if self.correct(self._answer.get(), self.first, self.sec):
@@ -394,6 +452,7 @@ class MultiplicationApp(Multiplication):
             self.game_over_screen()
         
     def _on_submit_down_fillin(self):
+        """Submits user's answer and updates counters, problems, and game over status for fill-in questions."""
         try:
             if (self._right, self._wrong_counter) != (0,0):
                 self._correct_wrong_destroy()
