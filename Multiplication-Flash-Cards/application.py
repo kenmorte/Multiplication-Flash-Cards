@@ -67,7 +67,7 @@ class MultiplicationApp(Multiplication):
         _start_button = tkinter.Button(self._canvas, text='Start!', font='Arial 18', command=self._on_start_down)
         _start_button.grid(row=4, column=1, columnspan=2, pady=10)
         
-        _quit_button = tkinter.Button(self._canvas, text='Quit', font='Arial 18', command=self._canvas.quit)
+        _quit_button = tkinter.Button(self._canvas, text='Quit', font='Arial 18', command=self.master.destroy)
         _quit_button.grid(row=4, column=2, pady=10)
         
     def _on_start_down(self):
@@ -111,7 +111,7 @@ class MultiplicationApp(Multiplication):
         main_menu = tkinter.Button(self._canvas, text='Main menu', command=self._on_mainmenu)
         main_menu.grid(row=3, column=0, columnspan=2, pady=30)
         
-        _quit = tkinter.Button(self._canvas, text='Quit', command=self._canvas.quit)
+        _quit = tkinter.Button(self._canvas, text='Quit', command=self.master.destroy)
         _quit.grid(row=3, column=1, pady=30)
         
     
@@ -152,7 +152,7 @@ class MultiplicationApp(Multiplication):
         self._main_menu.grid(row=20, column=2,          
             sticky=tkinter.S+tkinter.E, pady=30)
         
-        self._quit = tkinter.Button(self._canvas, text='Quit', command=self._canvas.quit)
+        self._quit = tkinter.Button(self._canvas, text='Quit', command=self.master.destroy)
         self._quit.grid(row=20, column=3,          
             sticky=tkinter.S+tkinter.E, pady=30)
         
