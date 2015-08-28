@@ -11,7 +11,7 @@ class MultiplicationApp(Multiplication):
         
     def start(self):
         """Opens separate window with flash cards application."""
-        self.master.mainloop()
+        self.master.mainloop() # Starts the mainloop for application
         
     def start_screen(self):
         """
@@ -21,11 +21,13 @@ class MultiplicationApp(Multiplication):
         """
         self._canvas = tkinter.Canvas(self.master)
         self._canvas.grid()
-        self._top_level()
+        self._top_level()   # Sets start screen canvas grid and spaces for widget placements
         
         self.reset_counter()
-        self.reset_streak()
+        self.reset_streak() # Resets game counters to 0
         
+        # Next several statements follow same principle:
+        # Sets widget placements for start screen canvas
         _welcome = tkinter.Label(self._canvas, text='Welcome to Multiplication Flash Cards!',
                                       anchor=tkinter.N, background='green',
                                       font=('Arial',40,'bold'))
@@ -88,15 +90,17 @@ class MultiplicationApp(Multiplication):
             self._min_num, self._max_num = (10,12)
         else:
             self._min_num, self._max_num = (int(number_range.split()[1].strip('\'s')),)*2
-        self._canvas.destroy()
-        self.create_flashcards()
+        self._canvas.destroy() # Destroys start screen canvas
+        self.create_flashcards() # Create numbers for flash cards after finishing start screen
 
     def game_over_screen(self):
         """Opens game over screen featuring a "Main Menu" button and "Quit" button."""
-        self._canvas = tkinter.Canvas(self.master)
+        self._canvas = tkinter.Canvas(self.master) # Creates new canvas layout for "game over" screen
         self._canvas.grid()
         self._top_level()
         
+        # Next several statements follow same principle:
+        # Sets widget placements for game-over screen canvas
         _game_over = tkinter.Label(self._canvas, text='Game over!', font='Arial 50 bold')
         _game_over.grid(row=0, column=0, columnspan=2, pady=10)
         _you_got = tkinter.Label(self._canvas, text='{} got:'.format(self._name), font='Arial 50 bold')
@@ -219,8 +223,8 @@ class MultiplicationApp(Multiplication):
         self._correct_display.grid(row=0, column=1)   
         
     def new_numbers(self):
-        """Creates new numbers for specific problem."""
-        self.first, self.sec = self.choose_numbers()
+        """Creates new random numbers for specific problem."""
+        self.first, self.sec = self.choose_numbers() 
         
     def entry(self):
         """Creates entry box for user to answer in a "Entry Question"."""
@@ -390,4 +394,4 @@ class MultiplicationApp(Multiplication):
         
 if __name__ == '__main__':
     app = MultiplicationApp()
-    app.start()         
+    app.start() # Start the application when running on main module
