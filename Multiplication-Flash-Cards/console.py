@@ -2,18 +2,18 @@ import random, tkinter
 
 class Multiplication:
     def __init__(self):
-        """Resets counters, correct streaks, and number limits."""
+        """Creates counters, correct streaks, and number limits."""
         self._wrong_counter = 0
         self._right = 0
-        self._min_num, self._max_num = (0,12)
-        self._streak = 0
+        self._min_num, self._max_num = (0,12) # Default number limits from 0-12
+        self._streak = 0    # Default number for counters = 0
         
     def console_start(self):
         """
         Console version of application. Starts flash cards application in its console-form.
         Most basic form includes randomized questions, error-checking, and game over message.
         """
-        self._name = input('What is your name? ')
+        self._name = input('What is your name? ') # Asks input for player's name
         while True:
             try:
                 self._count_choice = int(input('How many times do you want to get wrong or else game over? (Choose number 1 or more) '))
@@ -21,8 +21,8 @@ class Multiplication:
                     print('You must choose a number 1 or more!')
                     continue
                 break
-            except ValueError:
-                print('\nThat\'s not a valid number!')
+            except ValueError: 
+                print('\nThat\'s not a valid number!') # Error-checking for user entering non-number
                 
         while not self.game_is_over(self._count_choice, self._wrong_counter):
             first, second = self.choose_numbers()
@@ -41,7 +41,7 @@ class Multiplication:
         Randomly chooses two sets of numbers, with the first being strictly in between the number limits.
         The second number is chosen between 0 and 12.
         """
-        first = random.randint(self._min_num, self._max_num)
+        first = random.randint(self._min_num, self._max_num) 
         return (first, random.randint(0,12))
     
     def get_answer(self, first, second):
